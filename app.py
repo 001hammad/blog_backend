@@ -114,6 +114,13 @@ class Feedback(db.Model):
 # --------------------------------------------
 
 
+@app.route('/ping')
+def ping():
+    return "pong"
+
+
+
+
 @app.route('/')
 def home():
     return jsonify({
