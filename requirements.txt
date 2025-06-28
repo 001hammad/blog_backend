@@ -1,6 +1,2 @@
 Flask
-flask_sqlalchemy
-flask_cors
-flask_migrate
-python-dotenv
 gunicorn
