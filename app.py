@@ -378,7 +378,9 @@ def get_all_comments():
 # --------------------------------------------
 # INIT
 # --------------------------------------------
-if __name__ == '__main__':
-    with app.app_context():
+with app.app_context():
+    try:
         db.create_all()
-    app.run(debug=True)  # optional, for local dev only
+        print("✅ Tables created!")
+    except Exception as e:
+        print("⚠️ Table creation failed:", e)
