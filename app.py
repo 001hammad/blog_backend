@@ -251,7 +251,8 @@ def get_single_blog(id):
     "image_url": blog.image_url,
     "created_at": blog.created_at.isoformat(),
     "user_name": blog.user_name,       # ✅ Add this
-    "user_image": blog.user_image      # ✅ Add this
+    "user_image": blog.user_image,      # ✅ Add this
+    "user_id": blog.user_id
 })
 
 
