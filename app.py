@@ -25,6 +25,33 @@ migrate = Migrate(app, db)
 
 
 
+
+
+
+# --------------------------------------------
+# 📝 USERS
+# --------------------------------------------
+
+
+class User(db.Model):
+    id = db.Column(db.String(100), primary_key=True)  # Clerk user ID
+    name = db.Column(db.String(100), nullable=False)
+    image_url = db.Column(db.String(300))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "image_url": self.image_url,
+            "created_at": self.created_at.isoformat()
+        }
+
+
+
+
+
+
 # --------------------------------------------
 # 📝 BLOG
 # --------------------------------------------
@@ -108,6 +135,48 @@ class Feedback(db.Model):
             "content": self.content,
             "created_at": self.created_at.isoformat()
         }
+
+
+# --------------------------------------------
+# 📣 USER INFO ROUTES
+# --------------------------------------------
+
+@app.route('/api/users', methods=['POST'])
+def add_user():
+    data = request.get_json()
+    user_id = data.get('id')
+    name = data.get('name')
+    image_url = data.get('image_url')
+
+    if not user_id or not name:
+        return jsonify({"error": "Missing user ID or name"}), 400
+
+    # Check if user already exists
+    existing_user = User.query.get(user_id)
+    if existing_user:
+        return jsonify({"message": "User already exists"}), 200
+
+    new_user = User(id=user_id, name=name, image_url=image_url)
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify(new_user.to_dict()), 201
+
+
+
+
+
+
+@app.route('/api/users', methods=['GET'])
+def get_users():
+    users = User.query.order_by(User.created_at.desc()).all()
+    return jsonify([u.to_dict() for u in users])
+
+
+
+
+
+
 
 
 
